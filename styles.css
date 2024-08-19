@@ -19,8 +19,7 @@ body {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(8, 60px); /* 8 columns */
-    grid-gap: 5px;
+    grid-gap: 5px; /* Espacio entre las celdas */
     margin: 20px auto;
 }
 
