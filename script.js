@@ -9,6 +9,7 @@ const maxBrightness = 205;
 // Event listener for the redraw button
 redrawButton.addEventListener('click', () => {
     const gridSize = parseInt(gridSizeInput.value, 10);
+    console.log(`Grid size: ${gridSize}`)
     createGrid(gridSize);
 });
 
