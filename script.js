@@ -1,19 +1,19 @@
 const grid = document.querySelector('.grid');
 const gridSizeInput = document.getElementById('gridSize');
 const redrawButton = document.getElementById('redrawButton');
+const fixedPercentageDropdown = document.getElementById('fixedPercentage');
 
 // Variables globales
 const minBrightness = 50;
 const maxBrightness = 205;
-// Porcentaje de celdas fijas que deseas (por ejemplo, 20% de las celdas disponibles)
-const fixedCellsPercentage = 100; 
-const shuffleCount = calculateShuffleCount(gridSizeInput.value, fixedCellsPercentage);
+let shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
 // Matriz 3D en memoria
 let matrix;
 
 // Event listener para el botón de redibujar
 redrawBtn.addEventListener('click', () => {
     const gridSize = parseInt(gridSizeInput.value, 10);
+    shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
     initializeMatrix(gridSize);
     shuffleMatrix(gridSize);
     refreshDisplay(gridSize);
@@ -26,7 +26,6 @@ function calculateShuffleCount(gridSize, percentage) {
     
     // Calcular el número de celdas a desordenar basado en el porcentaje
     const numCellsToShuffle = Math.floor((percentage / 100) * totalCells);
-    
     // Asegurarse de que el número de celdas a desordenar sea un número par
     return numCellsToShuffle - (numCellsToShuffle % 2);
 }
@@ -56,7 +55,7 @@ function generateOrderedColors(gridSize) {
         generateRandomColor(),  // Esquina inferior izquierda
         generateRandomColor()   // Esquina inferior derecha
     ];
-
+    // TODO: Mejorar distribución inicial, cantidad de colores a usar, asegurar brillo y distancia
     for (let y = 0; y < gridSize; y++) {
         for (let x = 0; x < gridSize; x++) {
             matrix[y][x][0] = getColorFromCorners(x, y, gridSize, cornerColors);
@@ -147,11 +146,25 @@ function refreshDisplay(gridSize) {
             // Si es una celda fija, añadir una "X"
             if (matrix[y][x][1] === 1) {
                 markAsFixed(cell);
+            } else {
+                // Asegurarse de que celdas movibles estén vacías
+                cell.textContent = '';
             }
 
             grid.appendChild(cell);
         }
     }
+}
+
+// Marcar una celda como fija con una "X"
+function markAsFixed(cell) {
+    cell.textContent = 'X';
+    cell.style.fontWeight = 'bold';
+    cell.style.fontSize = '16px'; // Ajustar tamaño del texto
+    cell.style.color = 'black';  // Color de la "X"
+    cell.style.display = 'flex';
+    cell.style.justifyContent = 'center';
+    cell.style.alignItems = 'center';
 }
 
 // Generar un color aleatorio dentro de los límites de brillo
@@ -191,17 +204,6 @@ function interpolate(topLeft, topRight, bottomLeft, bottomRight, tx, ty) {
 function parseRgb(rgbStr) {
     const [r, g, b] = rgbStr.match(/\d+/g).map(Number);
     return { r, g, b };
-}
-
-// Marcar una celda como fija con una "X"
-function markAsFixed(cell) {
-    cell.textContent = 'X';
-    cell.style.fontWeight = 'bold';
-    cell.style.fontSize = '24px'; // Ajustar tamaño del texto
-    cell.style.color = 'black';  // Color de la "X"
-    cell.style.display = 'flex';
-    cell.style.justifyContent = 'center';
-    cell.style.alignItems = 'center';
 }
 
 // Inicializar la cuadrícula con el tamaño predeterminado
