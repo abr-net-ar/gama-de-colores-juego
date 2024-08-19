@@ -16,7 +16,7 @@ const cornerColors = [
 // Crear la cuadrícula
 function createGrid() {
     // Establecer el número de columnas en el grid según el tamaño definido
-    grid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
+    grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
     
     for (let i = 0; i < gridSize * gridSize; i++) {
         const cell = document.createElement('div');
