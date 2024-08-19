@@ -1,29 +1,39 @@
 const grid = document.querySelector('.grid');
-const gridSize = 5;  // Cambia el tamaño de la cuadrícula aquí
+const gridSizeInput = document.getElementById('gridSize');
+const redrawButton = document.getElementById('redrawButton');
 
 // Límites de brillo para evitar negro total o blanco total
 const minBrightness = 50;
 const maxBrightness = 205;
 
-// Generar cuatro colores aleatorios en las esquinas
-const cornerColors = [
-    generateRandomColor(),  // Esquina superior izquierda
-    generateRandomColor(),  // Esquina superior derecha
-    generateRandomColor(),  // Esquina inferior izquierda
-    generateRandomColor()   // Esquina inferior derecha
-];
+// Event listener for the redraw button
+redrawButton.addEventListener('click', () => {
+    const gridSize = parseInt(gridSizeInput.value, 10);
+    createGrid(gridSize);
+});
 
 // Crear la cuadrícula
-function createGrid() {
+function createGrid(gridSize) {
+    // Limpiar el grid existente
+    grid.innerHTML = '';
+
     // Establecer el número de columnas en el grid según el tamaño definido
     grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-    
+
+    // Generar cuatro colores aleatorios en las esquinas
+    const cornerColors = [
+        generateRandomColor(),  // Esquina superior izquierda
+        generateRandomColor(),  // Esquina superior derecha
+        generateRandomColor(),  // Esquina inferior izquierda
+        generateRandomColor()   // Esquina inferior derecha
+    ];
+
     for (let i = 0; i < gridSize * gridSize; i++) {
         const cell = document.createElement('div');
         cell.classList.add('cell');
-        
+
         // Asignar color degradado basado en los colores de las esquinas
-        cell.style.backgroundColor = getColorFromCorners(i);
+        cell.style.backgroundColor = getColorFromCorners(i, gridSize, cornerColors);
 
         grid.appendChild(cell);
     }
@@ -38,7 +48,7 @@ function generateRandomColor() {
 }
 
 // Interpolar color entre las cuatro esquinas basado en la posición de la celda
-function getColorFromCorners(index) {
+function getColorFromCorners(index, gridSize, cornerColors) {
     const x = index % gridSize;
     const y = Math.floor(index / gridSize);
 
@@ -73,5 +83,5 @@ function parseRgb(rgbStr) {
     return { r, g, b };
 }
 
-// Inicializar la cuadrícula
-createGrid();
+// Inicializar la cuadrícula con el tamaño predeterminado
+createGrid(parseInt(gridSizeInput.value, 10));

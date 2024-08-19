@@ -17,6 +17,10 @@ body {
     text-align: center;
 }
 
+.controls {
+    margin-bottom: 20px;
+}
+
 .grid {
     display: grid;
     grid-gap: 5px; /* Space between cells */
