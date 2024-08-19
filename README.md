@@ -1,8 +1,8 @@
 # Juego de Matriz de Colores
 
-## Descripción
+## Proyecto de Cuadrícula de Colores
 
-El Juego de Matriz de Colores es un juego basado en la web que desafía a los jugadores a organizar una cuadrícula de celdas coloreadas. La cuadrícula es una matriz de 8x8, donde cada celda muestra un color generado basado en un gradiente.
+Este proyecto es un juego interactivo en el que se muestra una cuadrícula de colores con una gradación específica. Los usuarios pueden ver y manipular la cuadrícula para ver cómo los colores cambian según las posiciones de las celdas.
 
 ### Visión General del Juego
 
@@ -10,8 +10,7 @@ El Juego de Matriz de Colores es un juego basado en la web que desafía a los ju
 - **Jugabilidad**: Al comenzar el juego, la cuadrícula se presenta con celdas coloreadas según un esquema de gradiente. Los jugadores deben reorganizar las celdas para coincidir con una configuración deseada.
 - **Colores de las Celdas**: Los colores de las celdas se interpolan entre cuatro colores aleatorios en las esquinas y el brillo se ajusta para evitar celdas completamente negras o blancas.
 
-### Características
+## Enlace
 
-- **Cuadrícula de 8x8**: El juego utiliza una matriz de 8x8 para mostrar las celdas.
-- **Colores Gradientes**: Los colores en la cuadrícula transicionan suavemente basados en el gradiente definido por los colores en las cuatro esquinas.
-- **Restricciones de Brillo**: Las celdas evitan ser completamente negras o blancas mediante un ajuste en el brillo.
+Puedes ver el resultado del proyecto en el siguiente enlace: [Ver el proyecto](https://abr-net-ar.github.io/gama-de-colores-juego/)
+
