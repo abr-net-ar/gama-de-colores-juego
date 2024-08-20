@@ -50,7 +50,7 @@ Todos los cambios importantes a este proyecto serán documentados en este archiv
 - Asegurar un brillo y una "distancia" entre colores adecuados en la generación inicial.
 - Implementar más opciones de interpolación de colores para una mayor flexibilidad.
 
-## [2024-08-24] - Mejora en la Generación de Colores
+## [2024-08-19c] - Mejora en la Generación de Colores
 ### Añadido
 - **Generación Mejorada de Colores**:
   - Implementación de una lógica para garantizar que las esquinas de la matriz tengan un brillo y distancia mínimos establecidos.
