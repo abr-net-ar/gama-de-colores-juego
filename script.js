@@ -6,6 +6,7 @@ const fixedPercentageDropdown = document.getElementById('fixedPercentage');
 // Variables globales
 const minBrightness = 50;
 const maxBrightness = 205;
+const minColorDistance = 100; // Valor ajustable según tus necesidades
 let shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
 // Matriz 3D en memoria
 let matrix;
@@ -49,18 +50,74 @@ function initializeMatrix(gridSize) {
 
 // Generar colores ordenados (Capa 0)
 function generateOrderedColors(gridSize) {
-    const cornerColors = [
-        generateRandomColor(),  // Esquina superior izquierda
-        generateRandomColor(),  // Esquina superior derecha
-        generateRandomColor(),  // Esquina inferior izquierda
-        generateRandomColor()   // Esquina inferior derecha
-    ];
-    // TODO: Mejorar distribución inicial, cantidad de colores a usar, asegurar brillo y distancia
+    let cornerColors = [];
+
+    // Generar las esquinas con restricciones de brillo y distancia
+    do {
+        cornerColors = [
+            generateRandomColor(),  // Esquina superior izquierda
+            generateRandomColor(),  // Esquina superior derecha
+            generateRandomColor(),  // Esquina inferior izquierda
+            generateRandomColor()   // Esquina inferior derecha
+        ];
+    } while (!isColorSetValid(cornerColors));
+
+    // Generar los colores para el resto de la cuadrícula
     for (let y = 0; y < gridSize; y++) {
         for (let x = 0; x < gridSize; x++) {
             matrix[y][x][0] = getColorFromCorners(x, y, gridSize, cornerColors);
         }
     }
+}
+
+// Verificar si el conjunto de colores de las esquinas es válido
+function isColorSetValid(cornerColors) {
+    let hasHighBrightness = false;
+    let hasLowBrightness = false;
+
+    for (let i = 0; i < cornerColors.length; i++) {
+        const brightness = calculateBrightness(cornerColors[i]);
+        if (brightness > (minBrightness + maxBrightness) / 2) {
+            hasHighBrightness = true;
+        } else if (brightness < (minBrightness + maxBrightness) / 2) {
+            hasLowBrightness = true;
+        }
+    }
+
+    // Verificar que haya al menos un color con alta y otra con baja luminosidad
+    if (!hasHighBrightness || !hasLowBrightness) {
+        return false;
+    }
+
+    // Verificar que la distancia mínima entre las esquinas sea adecuada
+    for (let i = 0; i < cornerColors.length; i++) {
+        for (let j = i + 1; j < cornerColors.length; j++) {
+            if (calculateColorDistance(cornerColors[i], cornerColors[j]) < minColorDistance) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+// Calcular la distancia euclidiana entre dos colores RGB
+function calculateColorDistance(color1, color2) {
+    const c1 = parseRgb(color1);
+    const c2 = parseRgb(color2);
+
+    return Math.sqrt(
+        Math.pow(c1.r - c2.r, 2) +
+        Math.pow(c1.g - c2.g, 2) +
+        Math.pow(c1.b - c2.b, 2)
+    );
+}
+
+// Calcular el brillo de un color RGB
+function calculateBrightness(color) {
+    const { r, g, b } = parseRgb(color);
+    // Fórmula simple de brillo promedio
+    return (r + g + b) / 3;
 }
 
 // Marcar celdas fijas (Capa 1)
