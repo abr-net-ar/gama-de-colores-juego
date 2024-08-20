@@ -50,3 +50,14 @@ Todos los cambios importantes a este proyecto serán documentados en este archiv
 - Asegurar un brillo y una "distancia" entre colores adecuados en la generación inicial.
 - Implementar más opciones de interpolación de colores para una mayor flexibilidad.
 
+## [2024-08-24] - Mejora en la Generación de Colores
+### Añadido
+- **Generación Mejorada de Colores**:
+  - Implementación de una lógica para garantizar que las esquinas de la matriz tengan un brillo y distancia mínimos establecidos.
+  - Se asegura que una de las esquinas tenga un brillo alto o bajo, pero no todas.
+  - Se verifica que la distancia entre los colores de las esquinas cumpla con un mínimo establecido, utilizando la distancia euclidiana para la medición.
+
+### Próximos Pasos
+- **Dificultad Dinámica**: Hacer la generación de colores y la dificultad del juego dinámicas mediante parámetros ajustables.
+- **Sistema de Puntuación**: Implementar un contador y un cálculo de puntos similar al golf, donde se establezca un "par" de movimientos mínimos y se cuenten los movimientos adicionales en positivo.
+- **Niveles de Juego**: Implementar niveles, donde la dificultad aumente a medida que el jugador avance en el juego.
