@@ -182,7 +182,6 @@ function shuffleMatrix(gridSize) {
     }
 }
 
-// Refrescar la pantalla con la capa 2
 function refreshDisplay(gridSize) {
     // Limpiar el grid existente
     grid.innerHTML = '';
@@ -194,6 +193,8 @@ function refreshDisplay(gridSize) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.style.backgroundColor = matrix[y][x][2];
+            cell.dataset.y = y; // Añadir coordenada y
+            cell.dataset.x = x; // Añadir coordenada x
 
             // Si es una celda fija, añadir una "X"
             if (matrix[y][x][1] === 1) {
@@ -203,10 +204,35 @@ function refreshDisplay(gridSize) {
                 cell.textContent = '';
             }
 
+            // Añadir el event listener para el click
+            cell.addEventListener('click', toggleBorder);
+
             grid.appendChild(cell);
         }
     }
 }
+
+function toggleBorder(event) {
+    const cell = event.currentTarget;
+    
+    // Verifica si la celda contiene una "X" en el texto
+    if (cell.textContent.includes('X')) {
+        return;
+    }
+
+    // Alternar clase de borde verde
+    if (cell.classList.contains('selected')) {
+        cell.classList.remove('selected');
+    } else {
+        // Quitar el borde de todas las celdas
+        const allCells = document.querySelectorAll('.cell');
+        allCells.forEach(c => c.classList.remove('selected'));
+
+        // Añadir borde verde a la celda seleccionada
+        cell.classList.add('selected');
+    }
+}
+
 
 // Marcar una celda como fija con una "X"
 function markAsFixed(cell) {

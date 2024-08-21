@@ -34,6 +34,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid transparent; /* Borde inicial transparente */
+}
+
+.cell.selected {
+    border: 2px solid rgb(1, 23, 119); /* Borde verde cuando está seleccionado */
 }
 
 /* Media query for tablets */
