@@ -2,11 +2,13 @@ const grid = document.querySelector('.grid');
 const gridSizeInput = document.getElementById('gridSize');
 const redrawButton = document.getElementById('redrawButton');
 const fixedPercentageDropdown = document.getElementById('fixedPercentage');
+const colorAmountDropdown = document.getElementById('colorAmount');
+
 
 // Variables globales
 const minBrightness = 50;
-const maxBrightness = 205;
-const minColorDistance = 100; // Valor ajustable según tus necesidades
+const maxBrightness = 235;
+const minColorDistance = 30; // Valor ajustable según tus necesidades
 let shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
 // Matriz 3D en memoria
 let matrix;
@@ -51,14 +53,15 @@ function initializeMatrix(gridSize) {
 // Generar colores ordenados (Capa 0)
 function generateOrderedColors(gridSize) {
     let cornerColors = [];
-
+    colorQuant = parseInt(colorAmountDropdown.value, 10)
+    selectedColor = selectRandomColor(colorQuant)
     // Generar las esquinas con restricciones de brillo y distancia
     do {
         cornerColors = [
-            generateRandomColor(),  // Esquina superior izquierda
-            generateRandomColor(),  // Esquina superior derecha
-            generateRandomColor(),  // Esquina inferior izquierda
-            generateRandomColor()   // Esquina inferior derecha
+            generateRandomColor(selectedColor),  // Esquina superior izquierda
+            generateRandomColor(selectedColor),  // Esquina superior derecha
+            generateRandomColor(selectedColor),  // Esquina inferior izquierda
+            generateRandomColor(selectedColor)   // Esquina inferior derecha
         ];
     } while (!isColorSetValid(cornerColors));
 
@@ -70,25 +73,24 @@ function generateOrderedColors(gridSize) {
     }
 }
 
-// Verificar si el conjunto de colores de las esquinas es válido
-function isColorSetValid(cornerColors) {
-    let hasHighBrightness = false;
-    let hasLowBrightness = false;
+// Seleccionar random color
+function selectRandomColor(colorQuant) {
+    let colorArray = [0, 0, 0]; // Inicializar el array con ceros
 
-    for (let i = 0; i < cornerColors.length; i++) {
-        const brightness = calculateBrightness(cornerColors[i]);
-        if (brightness > (minBrightness + maxBrightness) / 2) {
-            hasHighBrightness = true;
-        } else if (brightness < (minBrightness + maxBrightness) / 2) {
-            hasLowBrightness = true;
+    // Generar índices aleatorios para colocar 1s en el array
+    while (colorQuant > 0) {
+        const randomIndex = Math.floor(Math.random() * 3);
+        if (colorArray[randomIndex] === 0) { // Evitar sobrescribir un 1 existente
+            colorArray[randomIndex] = 1;
+            colorQuant--;
         }
     }
 
-    // Verificar que haya al menos un color con alta y otra con baja luminosidad
-    if (!hasHighBrightness || !hasLowBrightness) {
-        return false;
-    }
+    return colorArray;
+}
 
+// Verificar si el conjunto de colores de las esquinas es válido
+function isColorSetValid(cornerColors) {
     // Verificar que la distancia mínima entre las esquinas sea adecuada
     for (let i = 0; i < cornerColors.length; i++) {
         for (let j = i + 1; j < cornerColors.length; j++) {
@@ -111,13 +113,6 @@ function calculateColorDistance(color1, color2) {
         Math.pow(c1.g - c2.g, 2) +
         Math.pow(c1.b - c2.b, 2)
     );
-}
-
-// Calcular el brillo de un color RGB
-function calculateBrightness(color) {
-    const { r, g, b } = parseRgb(color);
-    // Fórmula simple de brillo promedio
-    return (r + g + b) / 3;
 }
 
 // Marcar celdas fijas (Capa 1)
@@ -224,11 +219,19 @@ function markAsFixed(cell) {
     cell.style.alignItems = 'center';
 }
 
-// Generar un color aleatorio dentro de los límites de brillo
-function generateRandomColor() {
-    const red = Math.floor(Math.random() * (maxBrightness - minBrightness) + minBrightness);
-    const green = Math.floor(Math.random() * (maxBrightness - minBrightness) + minBrightness);
-    const blue = Math.floor(Math.random() * (maxBrightness - minBrightness) + minBrightness);
+function generateRandomColor(colorArray) {
+    const red = colorArray[0] === 1 
+        ? Math.floor(Math.random() * (maxBrightness - minBrightness) + minBrightness) 
+        : 0;
+
+    const green = colorArray[1] === 1 
+        ? Math.floor(Math.random() * (maxBrightness - minBrightness) + minBrightness) 
+        : 0;
+
+    const blue = colorArray[2] === 1 
+        ? Math.floor(Math.random() * (maxBrightness - minBrightness) + minBrightness) 
+        : 0;
+
     return `rgb(${red}, ${green}, ${blue})`;
 }
 
