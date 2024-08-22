@@ -12,10 +12,12 @@ const minColorDistance = 30; // Valor ajustable según tus necesidades
 let shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
 // Matriz 3D en memoria
 let matrix;
+let gridSizeOrig = 0
 
 // Event listener para el botón de redibujar
 redrawBtn.addEventListener('click', () => {
     const gridSize = parseInt(gridSizeInput.value, 10);
+    gridSizeOrig = gridSize
     shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
     initializeMatrix(gridSize);
     shuffleMatrix(gridSize);
@@ -182,14 +184,14 @@ function shuffleMatrix(gridSize) {
     }
 }
 
-function refreshDisplay(gridSize) {
+function refreshDisplay(gridSizeT) {
     // Limpiar el grid existente
     grid.innerHTML = '';
-    grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    grid.style.gridTemplateColumns = `repeat(${gridSizeT}, 1fr)`;
 
     // Dibujar cada celda según la capa 2
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
+    for (let y = 0; y < gridSizeT; y++) {
+        for (let x = 0; x < gridSizeT; x++) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.style.backgroundColor = matrix[y][x][2];
@@ -219,17 +221,27 @@ function toggleBorder(event) {
     if (cell.textContent.includes('X')) {
         return;
     }
-
-    // Alternar clase de borde verde
-    if (cell.classList.contains('selected')) {
+    const selectedCell = document.querySelector('.cell.selected');
+    // Alternar clase de borde
+    if (selectedCell === null) {
+        cell.classList.add('selected');
+    }
+    else if (cell === document.querySelector('.cell.selected')) {
         cell.classList.remove('selected');
-    } else {
+    }
+    else {
+        // Obtén las coordenadas de las celdas seleccionadas
+        const selectedCoords = selectedCell.dataset;
+        const currentCoords = cell.dataset;
+        // Intercambia los colores en la capa 2 de la matriz
+        const tempColor = matrix[selectedCoords.y][selectedCoords.x][2];
+        matrix[selectedCoords.y][selectedCoords.x][2] = matrix[currentCoords.y][currentCoords.x][2];
+        matrix[currentCoords.y][currentCoords.x][2] = tempColor;
+        // Refresca la visualización del display
+        refreshDisplay(gridSizeOrig);
         // Quitar el borde de todas las celdas
         const allCells = document.querySelectorAll('.cell');
         allCells.forEach(c => c.classList.remove('selected'));
-
-        // Añadir borde verde a la celda seleccionada
-        cell.classList.add('selected');
     }
 }
 
