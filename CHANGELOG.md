@@ -61,3 +61,18 @@ Todos los cambios importantes a este proyecto serán documentados en este archiv
 - **Dificultad Dinámica**: Hacer la generación de colores y la dificultad del juego dinámicas mediante parámetros ajustables.
 - **Sistema de Puntuación**: Implementar un contador y un cálculo de puntos similar al golf, donde se establezca un "par" de movimientos mínimos y se cuenten los movimientos adicionales en positivo.
 - **Niveles de Juego**: Implementar niveles, donde la dificultad aumente a medida que el jugador avance en el juego.
+
+## [2024-08-22a] - Enhanced Cell Selection and Color Swapping
+### Added
+- **Cell Selection and Color Swapping**:
+  - Implemented a toggleBorder function to handle the selection of cells.
+  - When a cell is selected, it is marked with a border.
+  - If a second cell is selected, the colors in Layer 2 of the matrix are swapped between the two cells.
+  - If the same cell is selected twice, the border is removed without any further action.
+- **Changed**
+  - Updated the refreshDisplay function to clear all cell selections after a swap and to ensure the display is updated correctly after each interaction.
+- **Fixed**
+  - Resolved an issue where cells marked as fixed could still be selected for color swapping. Now, only non-fixed cells can be selected.
+- **TODO**
+  - Improve the visual feedback for selected cells to make the selection process more intuitive.
+  - Continue working on the scoring system and dynamic difficulty adjustment based on color distances.
