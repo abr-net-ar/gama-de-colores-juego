@@ -13,9 +13,13 @@ let shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPerc
 // Matriz 3D en memoria
 let matrix;
 let gridSizeOrig = 0
+let score = 0
+let initial = true
 
 // Event listener para el botón de redibujar
 redrawBtn.addEventListener('click', () => {
+    score = 0
+    initial = true
     const gridSize = parseInt(gridSizeInput.value, 10);
     gridSizeOrig = gridSize
     shuffleCount = calculateShuffleCount(gridSizeInput.value, parseInt(fixedPercentageDropdown.value, 10));
@@ -184,7 +188,23 @@ function shuffleMatrix(gridSize) {
     }
 }
 
+function isMatrixSolved() {
+    const gridSize = parseInt(gridSizeInput.value, 10);
+    for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+            if (matrix[y][x][2] !== matrix[y][x][0]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 function refreshDisplay(gridSizeT) {
+    if (!initial) {
+        score++;
+        console.log(score)
+    }
     // Limpiar el grid existente
     grid.innerHTML = '';
     grid.style.gridTemplateColumns = `repeat(${gridSizeT}, 1fr)`;
@@ -210,6 +230,10 @@ function refreshDisplay(gridSizeT) {
             cell.addEventListener('click', toggleBorder);
 
             grid.appendChild(cell);
+            if (!initial && isMatrixSolved()) {
+                alert(`¡Felicidades! Has resuelto el juego en ${score} movimientos.`);
+            }
+            initial = false
         }
     }
 }
