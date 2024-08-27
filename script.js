@@ -200,7 +200,7 @@ function isMatrixSolved() {
     return true;
 }
 
-function refreshDisplay(gridSizeT) {
+function refreshDisplay(gridSizeT, initial = false) {
     if (!initial) {
         score++;
         console.log(score)
@@ -230,11 +230,11 @@ function refreshDisplay(gridSizeT) {
             cell.addEventListener('click', toggleBorder);
 
             grid.appendChild(cell);
-            if (!initial && isMatrixSolved()) {
-                alert(`¡Felicidades! Has resuelto el juego en ${score} movimientos.`);
-            }
             initial = false
         }
+    }
+    if (!initial && isMatrixSolved()) {
+        alert(`¡Felicidades! Has resuelto el juego en ${score-1} movimientos.`);
     }
 }
 
@@ -330,4 +330,4 @@ function parseRgb(rgbStr) {
 
 // Inicializar la cuadrícula con el tamaño predeterminado
 initializeMatrix(parseInt(gridSizeInput.value, 10));
-refreshDisplay(parseInt(gridSizeInput.value, 10));
+refreshDisplay(parseInt(gridSizeInput.value, 10), true);
